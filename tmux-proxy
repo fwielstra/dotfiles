@@ -1,14 +1,1 @@
-tmux has-session -t ns-proxy
-if [ $? != 0 ]
-then
-  tmux new-session -s ns-proxy -n vim -d
-  tmux send-keys -t ns-proxy 'cd ~/workspace/ns-reisplanner/mock-ns-api' C-m
-  tmux send-keys -t ns-proxy 'vim mock.js' C-m
-  tmux split-window -v -t ns-proxy
-  tmux select-layout -t ns-proxy main-horizontal
-  tmux send-keys -t ns-proxy:0.1 'cd ~/workspace/ns-reisplanner/mock-ns-api && clear' C-m
-  tmux new-window -n console -t ns-proxy
-  tmux send-keys -t ns-proxy:2 'cd ~/workspace/ns-reisplanner/mock-ns-api && clear' C-m
-  tmux select-window -t ns-proxy:0
-fi
-tmux attach -t ns-proxy
+tmux -f ~/.tmux/ns-proxy.conf attach
