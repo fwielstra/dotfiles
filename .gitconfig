@@ -1,0 +1,6 @@
+[alias]
+	co = checkout
+	ci = commit
+	rb = rebase
+	s = status --short
+	l = log --graph --pretty=format:'%Cred%h %Cgreen(%cr) %Creset -%C(yellow)%d%Creset %s %C(bold blue)<%an>%Creset' --abbrev-commit --date=short --branches
