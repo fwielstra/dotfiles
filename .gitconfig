@@ -1,6 +1,125 @@
 [alias]
-	co = checkout
-	ci = commit
-	rb = rebase
-	s = status --short
-	l = log --graph --pretty=format:'%Cred%h %Cgreen(%cr) %Creset -%C(yellow)%d%Creset %s %C(bold blue)<%an>%Creset' --abbrev-commit --date=short --branches
+  co = checkout
+  ci = commit
+  cim = commit -m
+  pr = pull --rebase
+  s = status -sb
+  git = !git
+  # list aliases
+  list-alias = config --get-regexp alias
+  # log format base; shows AUTHOR date + relative date.
+  lformat = log --pretty=format:'%Cred%h%Creset %C(bold blue)%an%Creset %Cgreen %ad (%ar) %Creset-%C(yellow)%d%Creset %s' --date=format:'%a %d-%m %H:%M'
+  # log format with absolute days
+  ldateformat = log --pretty=format:'%Cred%h%Creset %C(bold blue)%an%Creset %Cgreen(%cD) %Creset-%C(yellow)%d%Creset %s'
+  # formatted, graph, branches
+  l = !git lformat --graph --branches
+  # c = comitter date, affected by rebases
+  lc = log --graph --branches --pretty=format:'%Cred%h%Creset %C(bold blue)%an%Creset %Cgreen %cd (%cr) %Creset-%C(yellow)%d%Creset %s' --date=format:'%a %d-%m %H:%M'
+  # formatted, no graph
+  lg = !git lformat --branches
+  # formatted, graph current branch only
+  lb = !git lformat --graph
+  # formatted, topo-order (?)
+  lt = !git lformat --graph --branches --topo-order
+  # formatted, date order
+  ld = !git lformat --graph --branches --date-order
+  # formatted, no pager (use with -n to show last X entries)
+  lnp = !git --no-pager l
+  # show last 5, 10, 25 logs with graph, without pager.
+  ll = !git lnp -n5
+  lll = !git lnp -n10
+  llll = !git lnp -n25
+  llb = !git --no-pager lb -n5
+  # show unmerged, untracked files
+  unmerged = ls-files --unmerged
+  untracked = ls-files --other --exclude-standard
+  commitwhores = shortlog -sn --
+  b = branch --all -vv
+  amend = commit --amend
+  am = commit --amend
+  amend-last = !git log -n 1 --pretty=tformat:%s%n%n%b | git commit -F - --amend
+  # amend staged changes to given commit hash; see https://stackoverflow.com/a/48999882
+  amend-to = "!f() { SHA=`git rev-parse \"$1\"`; git commit --fixup \"$SHA\" && GIT_SEQUENCE_EDITOR=true git rebase --interactive --autosquash \"$SHA^\"; }; f"
+  swearcount = !git log --pretty=format:'%s' | tr '[:upper:]' '[:lower:]' | tr '[:space:]' '\n' | sort | uniq -c | sort -nr | grep -iE '(fuck|shit|bitch|damn|piss|wank|kut)'
+  add-unmerged = !git ls-files --unmerged | xargs git add
+  # http://stackoverflow.com/questions/3801321/git-list-only-untracked-files-also-custom-commands
+  add-untracked = !git ls-files --other --exclude-standard | xargs git add
+  remove-untracked = !git ls-files --other --exclude-standard | xargs rm
+  remove-deleted = !git ls-files --deleted | xargs git rm
+  wdiff = diff --word-diff
+  # delete-old-branches = !git branch --merged | grep -v "\*" | grep -v "master" | xargs -n 1 git branch -d
+  push-origin = !sh git-push-origin
+  create-pull-request = !sh -c 'stash pull-request $0'
+  hash = !git log -1 --pretty=%H | tr -d \"\\n\" | pbcopy
+  yolo = push --force-with-lease --no-verify
+  yeet = push
+  pushf = push --force-with-lease
+  # show most recently active branches
+  recent = !git branch --sort=committerdate | tail
+  rc = !git recent
+  # Hard reset to upstream, e.g. when someone else did a rebase
+  reset-upstream = reset --hard @{u}
+[color]
+    ui = true
+[merge]
+    stat = true
+    conflictstyle = zdiff3
+[branch]
+    autosetupmerge = true
+		sort = committerdate
+[push]
+	default = simple
+	autoSetupRemote = true
+	followTags = true
+[rerere]
+    enabled = true
+		autoupdate = true
+[core]
+    ignorecase = false
+    whitespace = trailing-space,space-before-tab
+    editor = vim
+    excludesfile = /Users/freek/.gitignore_gloal
+    autocrlf = input
+	fsmonitor = true
+	untrackedCache = true
+[gitsh]
+    defaultCommand = status -s
+[filter "media"]
+    clean = git-media-clean %f
+    smudge = git-media-smudge %f
+[credential]
+    helper = osxkeychain
+[status]
+  showUntrackedFiles = all
+[diff]
+	colorMoved = plain
+  light = false
+	algorithm = histogram
+	renames = true
+	mnemonicPrefix = true
+[user]
+    useConfigOnly = false
+[init]
+	defaultBranch = main
+
+[filter "lfs"]
+	process = git-lfs filter-process
+	required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+[help]
+	autocorrect = prompt
+[column]
+	ui = auto
+[tag]
+	sort = version:refname
+[fetch]
+	prune = true
+	pruneTags = true
+	all = true
+[commit]
+	verbose = true
+[rebase]
+	autoSquash = true
+	autoStash = true
+	updateRefs = true
