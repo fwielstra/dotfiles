@@ -1,1 +1,0 @@
-tmux -f ~/.tmux/ns-proxy.conf attach
