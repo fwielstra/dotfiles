@@ -108,14 +108,14 @@
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 [help]
-	autocorrect = prompt
+	autocorrect = 20
 [column]
 	ui = auto
 [tag]
 	sort = version:refname
 [fetch]
 	prune = true
-	pruneTags = true
+	pruneTags = false 
 	all = true
 [commit]
 	verbose = true
